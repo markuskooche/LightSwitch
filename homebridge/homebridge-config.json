@@ -1,0 +1,10 @@
+{
+    "type": "lightbulb-OnOff",
+    "name": "ESP-LED",
+    "topics": {
+        "getOnline": "esp-led-online",
+        "getOn": "esp-led-get",
+        "setOn": "esp-led-set"
+    },
+    "accessory": "mqttthing"
+}
