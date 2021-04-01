@@ -33,16 +33,26 @@ def connect_to_network():
 connect_to_network()
 
 
-# MQTT CONFIGURATION
-# client = MQTTClient("device_id", "io.adafruit.com", user="your_username", password="your_api_key", port=1883)
-# client.connect()
-# client.subscribe(topic="youraccount/feeds/lights")
+client = MQTTClient("a8b3", "raspberrypi", port=1883)
+client.connect()
+client.set_callback(light_switch)
+client.subscribe(topic="esp-led-set")
+# client.publish(topic="esp-led-get", msg="true")
+
+
+def light_switch(topic, message):
+    if (topic == "setOn" and message == "true"):
+        # ONBOARD_LED.on()
+        pass
+    elif (topic == "setOn" and message == "false"):
+        # ONBOARD_LED.off()
+        pass
 
 
 # PIN CONFIGURATION
 ONBOARD_LED = Pin(2, Pin.OUT)
 RELAY = Pin(15, Pin.OUT)
-#STATE = Pin(4, Pin.IN)
+# STATE = Pin(4, Pin.IN)
 
 STATE = 0
 
@@ -50,5 +60,8 @@ STATE = 0
 # MAIN PROGRAM
 while True:
     STATE = (STATE + 1) % 2
+    MSG = "true" if STATE == 1 else "false"
+
     ONBOARD_LED.value(STATE)
-    sleep(1)
+    client.publish(topic="esp-led-online", msg=MSG)
+    sleep(2)

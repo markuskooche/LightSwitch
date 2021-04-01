@@ -1,14 +1,9 @@
 # LightSwitch
-### Collaborator:
-[Valentin Falke](https://github.com/vale700)</br>
-[Markus Koch](https://github.com/markuskooche)
-
-</br>
 
 ## Table of Contents
 1. Installation
-    1. a
-    2. b
+    1. [Install Node.JS & Homebridge on a Raspberry PI](#install-node-and-homebridge)
+    2. [How to flash an ESP8266](#flash-a-esp)
     3. c
 2. ...
 
@@ -25,7 +20,7 @@ Please create a [config.json](./controller/boot/config.json) file
 
 </br>
 
-## HOW TO FLASH A ESP8266
+## Flash an ESP8266
 1. Please make sure your controller is connected with a DATA CABLE.
 2. Open the terminal and navigate into this directory
 3. Run the init.sh script to install al dependencies and flash the controller.
@@ -47,8 +42,7 @@ esptool.py --port $port --baud 460800 write_flash --flash_size=detect 0 $binary
 ```
 
 </br>
-
-## HOW TO INSTALL NODE.JS & HOMEBRIDGE ON A RASPBERRY PI
+## Install Node.JS & Homebridge on a Raspberry PI
 
 1. Setup the Repository
 ```
@@ -114,3 +108,11 @@ hostname -I
 ## Technologies
 A list of technologies used within the project:
 * [Node.js](https://nodejs.org): Version 14.16.0
+* [Homebridge](https://homebridge.io): Version 1.3.4
+
+</br>
+
+## Collaborator
+
+* [Valentin Falke](https://github.com/vale700)</br>
+* [Markus Koch](https://github.com/markuskooche)
