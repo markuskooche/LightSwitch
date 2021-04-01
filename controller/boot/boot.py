@@ -38,20 +38,17 @@ RELAY = Pin(15, Pin.OUT)
 # STATE = Pin(4, Pin.IN)
 
 def light_switch(topic, message):
-    if (topic == "esp-led-set" and message == "true"):
+    if (topic == b"esp-led-set" and message == b"true"):
         ONBOARD_LED.off()
-        pass
-    elif (topic == "esp-led-set" and message == "false"):
+    elif (topic == b"esp-led-set" and message == b"false"):
         ONBOARD_LED.on()
-        pass
 
 client = MQTTClient("a8b3", "raspberrypi", port=1883)
 client.connect()
 client.set_callback(light_switch)
 client.subscribe(b"esp-led-set")
-client.publish(topic="esp-led-get", msg="working")
 
 # MAIN PROGRAM
 while True:
     client.check_msg()
-    sleep(2)
+    sleep(0.3)
