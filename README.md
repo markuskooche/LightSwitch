@@ -1,5 +1,9 @@
 # LightSwitch
+### Collaborator:
+[Valentin Falke](https://github.com/vale700)</br>
+[Markus Koch](https://github.com/markuskooche)
 
+</br>
 
 ## Table of Contents
 1. Installation
@@ -18,6 +22,8 @@ Please create a [config.json](./controller/boot/config.json) file
     }
 }
 ```
+
+</br>
 
 ## HOW TO FLASH A ESP8266
 1. Please make sure your controller is connected with a DATA CABLE.
@@ -40,6 +46,7 @@ esptool.py --port $port erase_flash
 esptool.py --port $port --baud 460800 write_flash --flash_size=detect 0 $binary
 ```
 
+</br>
 
 ## HOW TO INSTALL NODE.JS & HOMEBRIDGE ON A RASPBERRY PI
 
@@ -49,7 +56,9 @@ curl -sL https://deb.nodesource.com/setup_14.16.0 | sudo bash -
 ````
 
 2. Install node.js additional packages
+```
 sudo apt install -y nodejs gcc g++ make python net-tools
+```
 
 3. Upgrade node.js to the newest LTS version
 ```
@@ -92,14 +101,16 @@ npm install -g npm-check-updates
 shutdown -r now
 ```
 
-Now homebridge is runing on port 8581
+</br>
 
+Now homebridge is runing on port 8581
 You can get your IP Adress with this command
 ```
 hostname -I
 ```
 
+</br>
+
 ## Technologies
-***
 A list of technologies used within the project:
 * [Node.js](https://nodejs.org): Version 14.16.0
