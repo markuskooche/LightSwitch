@@ -6,7 +6,7 @@ brew install pip3
 pip3 install esptool
 pip3 install adafruit-ampy
 
-system_bin='system/esp8266-20200911-v1.13.bin'
+system_bin='binary/esp8266-[0-9]*-v*.bin'
 port='/dev/cu.usbserial-1420'
 
 esptool.py --port $port erase_flash
