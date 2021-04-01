@@ -32,36 +32,26 @@ def connect_to_network():
 
 connect_to_network()
 
-
-client = MQTTClient("a8b3", "raspberrypi", port=1883)
-client.connect()
-client.set_callback(light_switch)
-client.subscribe(topic="esp-led-set")
-# client.publish(topic="esp-led-get", msg="true")
-
-
-def light_switch(topic, message):
-    if (topic == "setOn" and message == "true"):
-        # ONBOARD_LED.on()
-        pass
-    elif (topic == "setOn" and message == "false"):
-        # ONBOARD_LED.off()
-        pass
-
-
 # PIN CONFIGURATION
 ONBOARD_LED = Pin(2, Pin.OUT)
 RELAY = Pin(15, Pin.OUT)
 # STATE = Pin(4, Pin.IN)
 
-STATE = 0
+def light_switch(topic, message):
+    if (topic == "esp-led-set" and message == "true"):
+        ONBOARD_LED.off()
+        pass
+    elif (topic == "esp-led-set" and message == "false"):
+        ONBOARD_LED.on()
+        pass
 
+client = MQTTClient("a8b3", "raspberrypi", port=1883)
+client.connect()
+client.set_callback(light_switch)
+client.subscribe(b"esp-led-set")
+client.publish(topic="esp-led-get", msg="working")
 
 # MAIN PROGRAM
 while True:
-    STATE = (STATE + 1) % 2
-    MSG = "true" if STATE == 1 else "false"
-
-    ONBOARD_LED.value(STATE)
-    client.publish(topic="esp-led-online", msg=MSG)
+    client.check_msg()
     sleep(2)
