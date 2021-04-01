@@ -4,9 +4,10 @@
 1. Installation
     1. [Install Node.JS & Homebridge on a Raspberry PI](#install-node-and-homebridge)
     2. [How to flash an ESP8266](#flash-a-esp)
-    3. c
-    4. [Preparing Homebridge On RaspberryPi](#preparing-homebridge-on-raspberrypi)
-    5. [Setting Up MQTT Server On RaspberryPi](#setting-up-mqtt-server-on-raspberrypi)
+    3. [Preparing Homebridge On RaspberryPi](#preparing-homebridge-on-raspberrypi)
+    4. [Setting Up MQTT Server On RaspberryPi](#setting-up-mqtt-server-on-raspberrypi)
+    5. [Technologies](#technologies)
+    5. [Collaborator](#collaborator)
 2. ...
 
 
@@ -107,19 +108,6 @@ hostname -I
 
 </br>
 
-## Technologies
-A list of technologies used within the project:
-* [Node.js](https://nodejs.org): Version 14.16.0
-* [Homebridge](https://homebridge.io): Version 1.3.4
-
-</br>
-
-## Collaborator
-
-* [Valentin Falke](https://github.com/vale700)</br>
-* [Markus Koch](https://github.com/markuskooche)
-
-
 ## Preparing Homebridge On RaspberryPi
 
 1. Execute [homebridge/install.sh](homebridge/install.sh) with
@@ -138,3 +126,16 @@ A list of technologies used within the project:
     ````
     sudo ./mqtt/install.sh
     ````
+
+
+## Technologies
+A list of technologies used within the project:
+* [Node.js](https://nodejs.org): Version 14.16.0
+* [Homebridge](https://homebridge.io): Version 1.3.4
+
+</br>
+
+## Collaborator
+
+* [Valentin Falke](https://github.com/vale700)</br>
+* [Markus Koch](https://github.com/markuskooche)
