@@ -40,21 +40,32 @@ RELAY = Pin(15, Pin.OUT)
 light_controller = Ws281xController(3)
 light_controller.set_hex_color("00FF00")
 
-def light_switch(topic, message):
+true_string = "true"
+false_string = "false"
+
+lamp_name = "wlan-lamp"
+topic_lamp_set_on = lamp_name+"/set_on"
+topic_lamp_set_rgb = lamp_name+"/set_rgb"
+
+def mqtt_did_recieve(topic, message):
     topic_str = topic.decode("utf-8")
     message_str = message.decode("utf-8")
-    if (topic_str == "esp-led-set" and message_str == "true"):
-        ONBOARD_LED.off()
-        light_controller.set_is_on(True)
-    elif (topic_str == "esp-led-set" and message_str == "false"):
-        ONBOARD_LED.on()
-        light_controller.set_is_on(False)
-
+    if (topic_str == topic_lamp_set_on):
+        if (message_str == true_string):
+            light_controller.set_is_on(True)
+            ONBOARD_LED.off()
+        elif(message_str == false_string):
+            light_controller.set_is_on(False)
+            ONBOARD_LED.on()
+    elif (topic_str == topic_lamp_set_rgb):
+        rgb = message_str.split(",")
+        light_controller.set_rgb_color(int(rgb[0]), int(rgb[1]), int(rgb[2]))
+        
 client = MQTTClient("a8b3", "raspberrypi", port=1883)
 client.connect()
-client.set_callback(light_switch)
-client.subscribe("esp-led-set")
-
+client.set_callback(mqtt_did_recieve)
+client.subscribe(topic_lamp_set_on)
+client.subscribe(topic_lamp_set_rgb)
 # MAIN PROGRAM
 while True:
     client.check_msg()
