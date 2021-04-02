@@ -7,6 +7,7 @@ from mqtt import MQTTClient
 from ws281x import Ws281xController
 
 #MARK: Configurable Constants
+SLEEPTIME_SECONDS = 0.3
 NUMBER_OF_PIXELS = 3
 PIN_WS281X = 4
 MQTT_CLIENT_ID_RANDOM = "a8b3"
@@ -14,6 +15,7 @@ MQTT_BROKER_ADDRESS = "raspberrypi"
 LAMP_NAME = "wlan-lamp"
 TOPIC_LAMP_SET_ON = LAMP_NAME+"/set_on"
 TOPIC_LAMP_SET_RGB = LAMP_NAME+"/set_rgb"
+TOPIC_LAMP_GET_ONLINE = LAMP_NAME+"/get_online"
 
 #MARK: Constants
 PIN_ONBOARD_LED = 2
@@ -74,7 +76,9 @@ def mqtt_did_recieve(topic, message):
 
 #MARK: MQTT
 client = MQTTClient(MQTT_CLIENT_ID_RANDOM, MQTT_BROKER_ADDRESS , port=MQTT_PORT)
+client.set_last_will(TOPIC_LAMP_GET_ONLINE, FALSE_STRING)
 client.connect()
+client.publish(TOPIC_LAMP_GET_ONLINE, TRUE_STRING)
 client.set_callback(mqtt_did_recieve)
 client.subscribe(TOPIC_LAMP_SET_ON)
 client.subscribe(TOPIC_LAMP_SET_RGB)
@@ -82,4 +86,5 @@ client.subscribe(TOPIC_LAMP_SET_RGB)
 # MAIN PROGRAM
 while True:
     client.check_msg()
-    sleep(0.3)
+    sleep(SLEEPTIME_SECONDS)
+
