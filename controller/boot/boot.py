@@ -41,17 +41,19 @@ light_controller = Ws281xController(3)
 light_controller.set_hex_color("00FF00")
 
 def light_switch(topic, message):
-    if (topic == b"esp-led-set" and message == b"true"):
+    topic_str = topic.decode("utf-8")
+    message_str = message.decode("utf-8")
+    if (topic_str == "esp-led-set" and message_str == "true"):
         ONBOARD_LED.off()
         light_controller.set_is_on(True)
-    elif (topic == b"esp-led-set" and message == b"false"):
+    elif (topic_str == "esp-led-set" and message_str == "false"):
         ONBOARD_LED.on()
         light_controller.set_is_on(False)
 
 client = MQTTClient("a8b3", "raspberrypi", port=1883)
 client.connect()
 client.set_callback(light_switch)
-client.subscribe(b"esp-led-set")
+client.subscribe("esp-led-set")
 
 # MAIN PROGRAM
 while True:
