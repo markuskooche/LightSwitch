@@ -4,7 +4,7 @@ from machine import Pin
 from time import sleep
 from network import WLAN, AP_IF, STA_IF
 from mqtt import MQTTClient
-
+from ws281x import Ws281xController
 
 # NETWORK CONFIGURATION
 def connect_to_network():
@@ -37,11 +37,16 @@ ONBOARD_LED = Pin(2, Pin.OUT)
 RELAY = Pin(15, Pin.OUT)
 # STATE = Pin(4, Pin.IN)
 
+light_controller = Ws281xController(3)
+light_controller.set_hex_color("00FF00")
+
 def light_switch(topic, message):
     if (topic == b"esp-led-set" and message == b"true"):
         ONBOARD_LED.off()
+        light_controller.set_is_on(True)
     elif (topic == b"esp-led-set" and message == b"false"):
         ONBOARD_LED.on()
+        light_controller.set_is_on(False)
 
 client = MQTTClient("a8b3", "raspberrypi", port=1883)
 client.connect()
