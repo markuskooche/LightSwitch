@@ -17,6 +17,7 @@ class Ws281xController:
     
     def set_rgb_color(self ,r ,g ,b):
         self.current_rgb = (r,g,b)
+        self._update_state()
 
     def set_is_on(self,is_on):
         self.is_on = is_on
