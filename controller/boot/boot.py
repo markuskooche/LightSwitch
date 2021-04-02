@@ -6,6 +6,21 @@ from network import WLAN, AP_IF, STA_IF
 from mqtt import MQTTClient
 from ws281x import Ws281xController
 
+#MARK: Configurable Constants
+NUMBER_OF_PIXELS = 3
+PIN_WS281X = 4
+MQTT_CLIENT_ID_RANDOM = "a8b3"
+MQTT_BROKER_ADDRESS = "raspberrypi"
+LAMP_NAME = "wlan-lamp"
+TOPIC_LAMP_SET_ON = LAMP_NAME+"/set_on"
+TOPIC_LAMP_SET_RGB = LAMP_NAME+"/set_rgb"
+
+#MARK: Constants
+PIN_ONBOARD_LED = 2
+TRUE_STRING = "true"
+FALSE_STRING = "false"
+MQTT_PORT = 1883
+
 # NETWORK CONFIGURATION
 def connect_to_network():
     with open("config.json", "r") as file:
@@ -32,40 +47,38 @@ def connect_to_network():
 
 connect_to_network()
 
-# PIN CONFIGURATION
-ONBOARD_LED = Pin(2, Pin.OUT)
-RELAY = Pin(15, Pin.OUT)
-# STATE = Pin(4, Pin.IN)
+#MARK: Lights
 
-light_controller = Ws281xController(3)
-light_controller.set_hex_color("00FF00")
-
-true_string = "true"
-false_string = "false"
-
-lamp_name = "wlan-lamp"
-topic_lamp_set_on = lamp_name+"/set_on"
-topic_lamp_set_rgb = lamp_name+"/set_rgb"
+# LIGHTS CONFIGURATION
+ONBOARD_LED = Pin(PIN_ONBOARD_LED, Pin.OUT)
+LIGHT_CONTROLLER = Ws281xController(NUMBER_OF_PIXELS,PIN_WS281X)
 
 def mqtt_did_recieve(topic, message):
     topic_str = topic.decode("utf-8")
     message_str = message.decode("utf-8")
-    if (topic_str == topic_lamp_set_on):
-        if (message_str == true_string):
-            light_controller.set_is_on(True)
+    #processing recieved topic and
+    if (topic_str == TOPIC_LAMP_SET_ON):
+        if (message_str == TRUE_STRING):
+            # On
+            LIGHT_CONTROLLER.set_is_on(True)
             ONBOARD_LED.off()
-        elif(message_str == false_string):
-            light_controller.set_is_on(False)
+        elif(message_str == FALSE_STRING):
+            # Off
+            LIGHT_CONTROLLER.set_is_on(False)
             ONBOARD_LED.on()
-    elif (topic_str == topic_lamp_set_rgb):
+    elif (topic_str == TOPIC_LAMP_SET_RGB):
+        #rgb change
         rgb = message_str.split(",")
-        light_controller.set_rgb_color(int(rgb[0]), int(rgb[1]), int(rgb[2]))
-        
-client = MQTTClient("a8b3", "raspberrypi", port=1883)
+        LIGHT_CONTROLLER.set_rgb_color(int(rgb[0]), int(rgb[1]), int(rgb[2]))
+
+
+#MARK: MQTT
+client = MQTTClient(MQTT_CLIENT_ID_RANDOM, MQTT_BROKER_ADDRESS , port=MQTT_PORT)
 client.connect()
 client.set_callback(mqtt_did_recieve)
-client.subscribe(topic_lamp_set_on)
-client.subscribe(topic_lamp_set_rgb)
+client.subscribe(TOPIC_LAMP_SET_ON)
+client.subscribe(TOPIC_LAMP_SET_RGB)
+
 # MAIN PROGRAM
 while True:
     client.check_msg()

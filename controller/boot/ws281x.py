@@ -23,6 +23,8 @@ class Ws281xController:
         self.is_on = is_on
         self._update_state()
 
+#MARK: private
+
     def _update_state(self):
         if (self.is_on):
             self._set_pixels(self.current_rgb[0],self.current_rgb[1],self.current_rgb[2])
