@@ -1,7 +1,7 @@
 import gc
 import ujson
 from machine import Pin
-from time import sleep
+import utime
 from network import WLAN, AP_IF, STA_IF
 from mqtt import MQTTClient
 from ws281x import Ws281xController
@@ -22,6 +22,8 @@ PIN_ONBOARD_LED = 2
 TRUE_STRING = "true"
 FALSE_STRING = "false"
 MQTT_PORT = 1883
+KEEP_ALIVE_TIME_SEC = 600
+PING_EVERY_SEC = KEEP_ALIVE_TIME_SEC * 0.9
 
 # NETWORK CONFIGURATION
 def connect_to_network():
@@ -75,7 +77,7 @@ def mqtt_did_recieve(topic, message):
 
 
 #MARK: MQTT
-client = MQTTClient(MQTT_CLIENT_ID_RANDOM, MQTT_BROKER_ADDRESS , port=MQTT_PORT)
+client = MQTTClient(MQTT_CLIENT_ID_RANDOM, MQTT_BROKER_ADDRESS , port=MQTT_PORT, keepalive=KEEP_ALIVE_TIME_SEC)
 client.set_last_will(TOPIC_LAMP_GET_ONLINE, FALSE_STRING)
 client.connect()
 client.publish(TOPIC_LAMP_GET_ONLINE, TRUE_STRING)
@@ -83,8 +85,15 @@ client.set_callback(mqtt_did_recieve)
 client.subscribe(TOPIC_LAMP_SET_ON)
 client.subscribe(TOPIC_LAMP_SET_RGB)
 
-# MAIN PROGRAM
+next_scheduled_ping_time = 0
+
+#MARK: MAIN PROGRAM
 while True:
+    #ping to ensure that the keep alive time will not expire
+    if (next_scheduled_ping_time < utime.time() ):
+        client.ping()
+        next_scheduled_ping_time = utime.time() + PING_EVERY_SEC
+    #normal execution
     client.check_msg()
-    sleep(SLEEPTIME_SECONDS)
+    utime.sleep(SLEEPTIME_SECONDS)
 
