@@ -4,7 +4,8 @@ from machine import Pin
 import utime
 from network import WLAN, AP_IF, STA_IF
 from mqtt import MQTTClient
-from ws281x import Ws281xController
+from ws281xctl import Ws281xController
+from wificonnect import connect_to_network
 
 #MARK: Configurable Constants
 SLEEPTIME_SECONDS = 0.3
@@ -25,33 +26,8 @@ MQTT_PORT = 1883
 KEEP_ALIVE_TIME_SEC = 600
 PING_EVERY_SEC = KEEP_ALIVE_TIME_SEC * 0.9
 
-# NETWORK CONFIGURATION
-def connect_to_network():
-    with open("config.json", "r") as file:
-        config = ujson.load(file)
-
-    ssid = config["credentials"]["ssid"]
-    password = config["credentials"]["password"]
-
-    access_point = WLAN(AP_IF)
-    access_point.active(False)
-    
-    station = WLAN(STA_IF)
-    station.active(True)
-
-    if not station.isconnected():
-        print('Verbindung zu', ssid, 'wird hergestellt...')
-        station.connect(ssid, password)
-
-        while not station.isconnected():
-            pass
-    
-    print('Verbindung wurde hergestellt!')
-    print('Netzwerkverbinung:', station.ifconfig())
-
-connect_to_network()
-
 #MARK: Lights
+connect_to_network()
 
 # LIGHTS CONFIGURATION
 ONBOARD_LED = Pin(PIN_ONBOARD_LED, Pin.OUT)
