@@ -96,4 +96,3 @@ while True:
     #normal execution
     client.check_msg()
     utime.sleep(SLEEPTIME_SECONDS)
-
