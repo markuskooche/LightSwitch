@@ -9,6 +9,9 @@ MQTT_PORT = 1883
 KEEP_ALIVE_TIME_SEC = 600
 PING_EVERY_SEC = KEEP_ALIVE_TIME_SEC * 0.9
 
+#this class should be the superclass of every device with MQTT Functionality
+#its __init__ ; setup_subscriptions ; and run methods may be overwritten
+#the run method has to be called every execution cycle
 class MQTTDevice:
 
     def __init__(self,topic_online,true_message="true",false_message="false"):
@@ -34,6 +37,7 @@ class MQTTDevice:
             self.client.ping()
             self.next_scheduled_ping_time = utime.time() + PING_EVERY_SEC
 
+    #run method has to be called every execution cycle
     def run(self):
         self._ping()
         self.client.check_msg()
