@@ -65,7 +65,7 @@ class Ws281x:
             ONBOARD_LED.on()
 
     def did_change_rgb(self,message):
-        rgb = message_str.split(",")
+        rgb = message.split(",")
         r = int(rgb[0])
         g = int(rgb[1])
         b = int(rgb[2])
