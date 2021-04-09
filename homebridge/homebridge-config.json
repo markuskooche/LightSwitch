@@ -1,0 +1,12 @@
+{
+    "type": "lightbulb-RGB",
+    "name": "Wlan-Lamp",
+    "topics": {
+        "getOnline": "wlan-lamp/get_online",
+        "getRGB": "wlan-lamp/get_rgb",
+        "setRGB": "wlan-lamp/set_rgb",
+        "getOn": "wlan-lamp/get_on",
+        "setOn": "wlan-lamp/set_on"
+    },
+    "accessory": "mqttthing"
+}
