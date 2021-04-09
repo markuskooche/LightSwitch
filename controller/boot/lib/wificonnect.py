@@ -1,6 +1,7 @@
 import ujson
 from network import WLAN, AP_IF, STA_IF
 
+
 def connect_to_network():
     with open("config.json", "r") as file:
         config = ujson.load(file)

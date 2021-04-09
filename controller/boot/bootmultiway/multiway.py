@@ -2,6 +2,7 @@ import utime
 from machine import Pin
 from mqttdevice import MQTTDevice
 
+#MARK: Configurable Constants
 TOPIC_LAMP_SET_ON = "esp-led-set"
 TOPIC_LAMP_GET_ON = "esp-led-get"
 TOPIC_LAMP_GET_ONLINE = "get_online"
@@ -9,7 +10,7 @@ TOPIC_LAMP_GET_ONLINE = "get_online"
 TRUE_STRING = "true"
 FALSE_STRING = "false"
 
-
+#MARK: Constants
 STATE = Pin(4, Pin.IN)
 CHANGE = Pin(5, Pin.OUT)
 
@@ -19,7 +20,6 @@ class MultiwaySwitch(MQTTDevice):
     def __init__(self):
         self.previous_state = -1
         super().__init__(TOPIC_LAMP_GET_ONLINE)
-
 
     def setup_subscriptions(self):
         self.client.set_callback(self._siri_switch_handler)

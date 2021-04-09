@@ -4,7 +4,6 @@ from mqttdevice import MQTTDevice
 from ws281xctl import Ws281xController
 
 #MARK: Configurable Constants
-
 LAMP_NAME = "wlan-lamp"
 TOPIC_LAMP_SET_ON = LAMP_NAME+"/set_on"
 TOPIC_LAMP_SET_RGB = LAMP_NAME+"/set_rgb"
@@ -19,6 +18,7 @@ TRUE_STRING = "true"
 FALSE_STRING = "false"
 
 ONBOARD_LED = Pin(PIN_ONBOARD_LED, Pin.OUT)
+
 
 class Ws281x(MQTTDevice):
     

@@ -1,13 +1,13 @@
 import utime
 from mqtt import MQTTClient
 
-
 MQTT_CLIENT_ID_RANDOM = "a8b3"
 MQTT_BROKER_ADDRESS = "raspberrypi"
 
 MQTT_PORT = 1883
 KEEP_ALIVE_TIME_SEC = 600
 PING_EVERY_SEC = KEEP_ALIVE_TIME_SEC * 0.9
+
 
 #this class should be the superclass of every device with MQTT Functionality
 #its __init__ ; setup_subscriptions ; and run methods may be overwritten
