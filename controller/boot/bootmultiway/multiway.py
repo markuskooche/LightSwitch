@@ -1,13 +1,6 @@
 import utime
 from machine import Pin
-from mqtt import MQTTClient
-
-MQTT_CLIENT_ID_RANDOM = "a8b3"
-MQTT_BROKER_ADDRESS = "raspberrypi"
-
-MQTT_PORT = 1883
-KEEP_ALIVE_TIME_SEC = 600
-PING_EVERY_SEC = KEEP_ALIVE_TIME_SEC * 0.9
+from mqttdevice import MQTTDevice
 
 TOPIC_LAMP_SET_ON = "esp-led-set"
 TOPIC_LAMP_GET_ON = "esp-led-get"
@@ -21,18 +14,14 @@ STATE = Pin(4, Pin.IN)
 CHANGE = Pin(5, Pin.OUT)
 
 
-class MultiwaySwitch():
+class MultiwaySwitch(MQTTDevice):
 
     def __init__(self):
-        self.client = MQTTClient(MQTT_CLIENT_ID_RANDOM, MQTT_BROKER_ADDRESS, port=MQTT_PORT, keepalive=KEEP_ALIVE_TIME_SEC)
-        self.next_scheduled_ping_time = 0
         self.previous_state = -1
-        self._client_setup()
-    
-    def _client_setup(self):
-        self.client.set_last_will(TOPIC_LAMP_GET_ONLINE, FALSE_STRING)
-        self.client.connect()
-        self.client.publish(TOPIC_LAMP_GET_ONLINE, TRUE_STRING)
+        super().__init__(TOPIC_LAMP_GET_ONLINE)
+
+
+    def setup_subscriptions(self):
         self.client.set_callback(self._siri_switch_handler)
         self.client.subscribe(TOPIC_LAMP_SET_ON)
         self._physical_switch_handler()
@@ -55,15 +44,6 @@ class MultiwaySwitch():
                 utime.sleep(0.1)
                 CHANGE.off()
     
-    def _ping(self):
-        if (self.next_scheduled_ping_time < utime.time() ):
-            self.client.ping()
-            self.next_scheduled_ping_time = utime.time() + PING_EVERY_SEC
-    
-    def _check_msg(self):
-        self.client.check_msg()
-
     def run(self):
-        self._ping()
+        super().run()
         self._physical_switch_handler()
-        self._check_msg()
